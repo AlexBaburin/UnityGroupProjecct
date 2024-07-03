@@ -59,7 +59,7 @@
                 {
                     "name": "1D Axis Controller",
                     "id": "cc3a74da-d4ae-42f1-9793-d69ce1942225",
-                    "path": "1DAxis(whichSideWins=1)",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "StickDeadzone",
                     "groups": "",
@@ -92,7 +92,7 @@
                 {
                     "name": "1D Axis Arrows",
                     "id": "66e8a319-1262-4714-9294-72835aff80ae",
-                    "path": "1DAxis(whichSideWins=1)",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
