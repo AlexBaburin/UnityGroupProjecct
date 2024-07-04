@@ -17,8 +17,11 @@ public class PlayerMovement : MonoBehaviour
     bool isJumping = false;
     bool isNearWall = false;
     bool isJumpCancelled = false;
+    bool isDead = false;
 
     AttackScript attack;
+    PlayerDamaged playerDamaged;
+    HealthWithBlock hp;
 
     public Transform groundCheck;
     public Transform wallCheck;
@@ -44,12 +47,15 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         attack = GetComponent<AttackScript>();
+        playerDamaged = GetComponent<PlayerDamaged>();
+        hp = GetComponent<HealthWithBlock>();
     }
 
     private void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
         isNearWall = Physics2D.OverlapCircle(wallCheck.position, 0.1f, groundLayer);
+        isDead = playerDamaged.isDead;
 
         animator.SetBool("WallSlide", isNearWall);
         //Debug.Log(isGrounded);
@@ -93,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
         {
             direction = -1;
         }
-        if (attack.isAttacking)
+        if (attack.isAttacking || isDead || hp.isBlocking)
         {
             if (isGrounded)
                 playerRB.velocity = new Vector2(playerRB.velocity.x * 0.9f, playerRB.velocity.y);

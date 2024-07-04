@@ -34,6 +34,8 @@ public class Health : MonoBehaviour
             else
                 frameTimer++;
         }
+        if (health < 0)
+            health = 0;
 
         damage = 0f;
     }
