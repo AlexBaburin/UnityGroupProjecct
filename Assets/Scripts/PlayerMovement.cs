@@ -1,23 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
-
 public class PlayerMovement : MonoBehaviour
 {
     PlayerControls controls;
     float direction = 0;
+    static public int coins = 0;
 
     public float speed = 400;
+    public float MaxSpeed = 1200;
     public float jumpForce = 6;
+
+
     bool isFacingRight = true;
     bool isGrounded = false;
     bool isJumping = false;
+    bool isNearWall = false;
     bool isJumpCancelled = false;
-    bool isAttacking = false;
-    bool isAttackQueued = false;
-    int attackCounter = 0;
+    bool isDead = false;
+
+    AttackScript attack;
+    PlayerDamaged playerDamaged;
+    HealthWithBlock hp;
+
     public Transform groundCheck;
+    public Transform wallCheck;
     public LayerMask groundLayer;
 
     public Rigidbody2D playerRB;
@@ -38,37 +47,18 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        attack = GetComponent<AttackScript>();
+        playerDamaged = GetComponent<PlayerDamaged>();
+        hp = GetComponent<HealthWithBlock>();
     }
 
     private void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
-        //Debug.Log(isGrounded);
+        isNearWall = Physics2D.OverlapCircle(wallCheck.position, 0.1f, groundLayer);
+        isDead = playerDamaged.isDead;
 
-        isAttacking = (AnimatorIsPlaying("Attack1") || AnimatorIsPlaying("Attack2") || AnimatorIsPlaying("Attack3"));
-        //Debug.Log(isAttacking);
-        animator.SetBool("Attacking", isAttacking);
-
-        //Attack
-        if (attackCounter >= 3)
-            attackCounter = 0;
-        if (controls.Grounded.Attack.WasReleasedThisFrame())
-        {
-            if (!isAttacking)
-            {
-                attackCounter++;
-                animator.SetTrigger("Attack" + attackCounter);
-            }
-            else
-                isAttackQueued = true;
-        }
-        if (!isAttacking && isAttackQueued)
-        {
-            attackCounter++;
-            animator.SetTrigger("Attack" + attackCounter);
-            isAttackQueued = false;
-        }
+        animator.SetBool("WallSlide", isNearWall);
 
         //Jump
         if (controls.Grounded.Jump.IsPressed() && isGrounded && !isJumping)
@@ -107,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
         {
             direction = -1;
         }
-        if (isAttacking)
+        if (attack.isAttacking || isDead || hp.isBlocking)
         {
             if (isGrounded)
                 playerRB.velocity = new Vector2(playerRB.velocity.x * 0.9f, playerRB.velocity.y);
@@ -117,6 +107,14 @@ public class PlayerMovement : MonoBehaviour
         else
             playerRB.velocity = new Vector2(direction * speed * Time.fixedDeltaTime, playerRB.velocity.y);
 
+        if (playerRB.velocity.y > MaxSpeed)
+        {
+            playerRB.velocity = new Vector2(playerRB.velocity.x, MaxSpeed);
+        }
+        if (playerRB.velocity.x < MaxSpeed * -1)
+        {
+            playerRB.velocity = new Vector2(playerRB.velocity.x, MaxSpeed * -1);
+        }
         animator.SetFloat("Speed", Mathf.Abs(direction));
         animator.SetBool("Grounded", isGrounded);
         animator.SetFloat("AirSpeedY", playerRB.velocity.y);
@@ -131,10 +129,5 @@ public class PlayerMovement : MonoBehaviour
     {
         transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
         isFacingRight = !isFacingRight;
-    }
-
-    bool AnimatorIsPlaying(string stateName)
-    {
-        return animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
     }
 }
