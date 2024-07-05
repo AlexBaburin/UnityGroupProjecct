@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UIElements;
 public class PlayerMovement : MonoBehaviour
 {
     public PlayerControls controls;
     float direction = 0;
-    static public int coins = 0;
 
     public float speed = 400;
     public float MaxSpeed = 1200;
@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody2D playerRB;
     public Animator animator;
+    public TextMeshProUGUI textOfCoins;
 
     private void Awake()
     {
@@ -55,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        textOfCoins.text = "x" + Coin.coins;
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
         isNearWall = Physics2D.OverlapCircle(wallCheck.position, 0.1f, groundLayer);
         isDead = playerDamaged.isDead;
