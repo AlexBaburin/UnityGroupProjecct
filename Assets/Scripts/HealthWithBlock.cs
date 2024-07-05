@@ -20,13 +20,13 @@ public class HealthWithBlock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        controls = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().controls;
+
         attackScript = GetComponent<AttackScript>();
     }
 
     private void Awake()
     {
-        controls = new PlayerControls();
-        controls.Enable();
     }
 
         // Update is called once per frame
