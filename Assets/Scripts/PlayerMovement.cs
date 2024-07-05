@@ -99,10 +99,15 @@ public class PlayerMovement : MonoBehaviour
         }
         if (attack.isAttacking || isDead || hp.isBlocking)
         {
-            if (isGrounded)
-                playerRB.velocity = new Vector2(playerRB.velocity.x * 0.9f, playerRB.velocity.y);
-            if (Mathf.Abs(playerRB.velocity.x) < 0.5)
-                playerRB.velocity = new Vector2(0, playerRB.velocity.y);
+                if (isGrounded)
+                    playerRB.velocity = new Vector2(playerRB.velocity.x * 0.9f, playerRB.velocity.y);
+                if (Mathf.Abs(playerRB.velocity.x) < 0.5)
+                    playerRB.velocity = new Vector2(0, playerRB.velocity.y);
+            if (isDead)
+            {
+                direction = 0;
+                playerRB.velocity = new Vector2(playerRB.velocity.x, 0);
+            }
         }
         else
             playerRB.velocity = new Vector2(direction * speed * Time.fixedDeltaTime, playerRB.velocity.y);

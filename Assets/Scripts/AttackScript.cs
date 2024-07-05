@@ -25,11 +25,13 @@ public class AttackScript : MonoBehaviour
 
     public Animator animator;
     public Slider PlayerStaminaBar;
+    HealthWithBlock hp;
 
     // Start is called before the first frame update
     void Start()
     {
         PlayerStaminaBar.value = stamina;
+        hp = GetComponent<HealthWithBlock>();
     }
 
     private void Awake()
@@ -74,7 +76,7 @@ public class AttackScript : MonoBehaviour
             attackCounter = 0;
         if (attackCounter > 3)
             attackCounter = 0;
-        if (controls.Grounded.Attack.WasPressedThisFrame())
+        if (controls.Grounded.Attack.WasPressedThisFrame() && !hp.isBlocking && hp.health > 0)
         {
             if (!isAttacking && !isAttackQueued && stamina - staminaDamageAmount > 0)
             {
