@@ -30,7 +30,7 @@ public class HealthWithBlock : MonoBehaviour
     }
 
         // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if ((controls.Grounded.Block.IsPressed() && !(AnimatorIsPlaying("Hurt") || AnimatorIsPlaying("Wall Slide")) && health > 0 ||
             AnimatorIsPlaying("Block")) && !attackScript.isAttacking)

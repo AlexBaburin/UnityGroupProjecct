@@ -47,7 +47,7 @@ public class chasingState : StateMachineBehaviour
             animator.SetBool("isClosed", true);
             animator.SetBool("isChasing", false);
         }
-        Debug.Log("isPlayer = " + isPlayer + " isGrounded = " + isGrounded + " " + Physics2D.Raycast(borderCheck.position, Vector2.right, 2f, groundMask).point + " " + Physics2D.Raycast(borderCheck.position, Vector2.left, 2f, groundMask).point);
+        //Debug.Log("isPlayer = " + isPlayer + " isGrounded = " + isGrounded + " " + Physics2D.Raycast(borderCheck.position, Vector2.right, 2f, groundMask).point + " " + Physics2D.Raycast(borderCheck.position, Vector2.left, 2f, groundMask).point);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

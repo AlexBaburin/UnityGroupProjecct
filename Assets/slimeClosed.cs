@@ -8,9 +8,9 @@ public class slimeClosed : StateMachineBehaviour
     float distance;
     bool isAttacking;
 
-    bool isActiveAttackArea = false;
+    bool isActiveAttackArea = true, isAttacked = false;
     float timer = 0f;
-    float frameOfAttack = 0.02f;
+    float frameOfAttack = 0.3f;
 
     GameObject attackArea;
     Animator animator;
@@ -26,19 +26,24 @@ public class slimeClosed : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         distance = Vector2.Distance(target.position, animator.transform.position);
+
         timer += Time.deltaTime;
-        Debug.Log(timer);
-        if (timer > frameOfAttack)
+        
+        if (isAttacked)
+        {
+            timer = 0f;
+            isAttacked = false;
+            isActiveAttackArea = false;
+        }
+        if (timer >= 1)
         {
             isActiveAttackArea = true;
-            timer = 0;
+            isAttacked = true;
         }
-        else
-            isActiveAttackArea = false;
-
+        //Debug.Log("bool = " + isActiveAttackArea + " timer = " + timer);
         attackArea.SetActive(isActiveAttackArea);
 
-        if (distance > 2 && !isAttacking)
+        if ((distance > 2 && !isAttacking) || isActiveAttackArea)
         {
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {

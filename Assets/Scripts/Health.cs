@@ -19,7 +19,7 @@ public class Health : MonoBehaviour
         
     }
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (damage > 0 && health > 0 && !isIFramesActive)
         {
