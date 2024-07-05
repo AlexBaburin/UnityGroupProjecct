@@ -79,7 +79,7 @@
                 {
                     "name": "1D Axis Controller",
                     "id": "cc3a74da-d4ae-42f1-9793-d69ce1942225",
-                    "path": "1DAxis",
+                    "path": "1DAxis(whichSideWins=1)",
                     "interactions": "",
                     "processors": "StickDeadzone",
                     "groups": "",
@@ -112,7 +112,7 @@
                 {
                     "name": "1D Axis Arrows",
                     "id": "66e8a319-1262-4714-9294-72835aff80ae",
-                    "path": "1DAxis",
+                    "path": "1DAxis(whichSideWins=1)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -223,17 +223,6 @@
                     "name": "",
                     "id": "7bc547fd-7b33-4ac0-bf87-1d03db430130",
                     "path": "<Keyboard>/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Block",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "21ef4aa9-da91-4110-b7c4-12fa01b5613a",
-                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

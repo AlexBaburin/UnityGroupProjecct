@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthWithBlock : MonoBehaviour
 {
@@ -13,12 +14,12 @@ public class HealthWithBlock : MonoBehaviour
     bool isIFramesActive = false;
     float frameTimer = 0f;
 
-    AttackScript attackScript;
+    public Slider healthBar;
 
     // Start is called before the first frame update
     void Start()
     {
-        attackScript = GetComponent<AttackScript>();
+        
     }
 
     private void Awake()
@@ -30,23 +31,21 @@ public class HealthWithBlock : MonoBehaviour
         // Update is called once per frame
     void FixedUpdate()
     {
-        if ((controls.Grounded.Block.IsPressed() && !(AnimatorIsPlaying("Hurt") || AnimatorIsPlaying("Wall Slide")) && health > 0 ||
-            AnimatorIsPlaying("Block")) && !attackScript.isAttacking)
+        if (controls.Grounded.Block.IsPressed() && !(AnimatorIsPlaying("Hurt") || AnimatorIsPlaying("Wall Slide")) && health > 0 ||
+            AnimatorIsPlaying("Block"))
         {
-            animator.SetBool("Blocking", true);
-            if (!AnimatorIsPlaying("Block") && !AnimatorIsPlaying("Idle Block"))
-                animator.SetTrigger("Block");
+            animator.SetBool("IdleBlock", true);
             isBlocking = true;
             if (damage > 0)
             {
                 damage = 0;
-                animator.SetTrigger("Deflect");
+                animator.SetTrigger("Block");
             }
         }
         else if (health > 0)
         {
             isBlocking = false;
-            animator.SetBool("Blocking", false);
+            animator.SetBool("IdleBlock", false);
         }
 
         //Same as Health
@@ -54,6 +53,7 @@ public class HealthWithBlock : MonoBehaviour
         if (damage > 0 && health > 0 && !isIFramesActive)
         {
             health -= damage;
+            healthBar.value = health;
             isIFramesActive = true;
         }
         if (isIFramesActive)

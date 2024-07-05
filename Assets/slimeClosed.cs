@@ -8,22 +8,38 @@ public class slimeClosed : StateMachineBehaviour
     float distance;
     bool isAttacking;
 
+    bool isActiveAttackArea = false;
+    float timer = 0f;
+    float frameOfAttack = 0.02f;
+
+    GameObject attackArea;
     Animator animator;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         target = GameObject.FindGameObjectsWithTag("Player")[0].transform;
         animator = animator.GetComponent<Enemy>().animator;
+        attackArea = animator.GetComponent<Enemy>().attackArea;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         distance = Vector2.Distance(target.position, animator.transform.position);
-        Debug.Log($"dis = {distance}, isAttacking = {isAttacking}");
+        timer += Time.deltaTime;
+        Debug.Log(timer);
+        if (timer > frameOfAttack)
+        {
+            isActiveAttackArea = true;
+            timer = 0;
+        }
+        else
+            isActiveAttackArea = false;
+
+        attackArea.SetActive(isActiveAttackArea);
+
         if (distance > 2 && !isAttacking)
         {
-            Debug.Log("IT HAS GONE");
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
                 animator.SetBool("isClosed", false);

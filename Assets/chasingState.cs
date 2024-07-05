@@ -10,7 +10,7 @@ public class chasingState : StateMachineBehaviour
     float distance;
 
     public float speed = 3;
-    Transform borderCheck;
+    Transform borderCheck, groundCheck;
     LayerMask playerLayer, groundMask;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -20,16 +20,26 @@ public class chasingState : StateMachineBehaviour
         rb = animator.GetComponent<Enemy>().rb;
         playerLayer = animator.GetComponent<Enemy>().layerMask;
         groundMask = animator.GetComponent<Enemy>().groundMask;
+        groundCheck = animator.GetComponent<Enemy>().groundCheck;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         isPlayer = Physics2D.OverlapCircle(rb.position, 2f, playerLayer);
-        isGrounded = Physics2D.OverlapCircle(borderCheck.position, 1f, groundMask);
-        animator.transform.position = Vector2.MoveTowards(animator.transform.position, target.position, speed * Time.deltaTime);
-        if (Physics2D.Raycast(borderCheck.position, Vector2.down, 2) == false)
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundMask);
+        Vector2 newPos = new Vector2(target.position.x, animator.transform.position.y);
+        animator.transform.position = Vector2.MoveTowards(animator.transform.position, newPos, speed * Time.deltaTime);
+        if ((Physics2D.Raycast(borderCheck.position, Vector2.left, 0.05f, groundMask) == true || Physics2D.Raycast(borderCheck.position, Vector2.right, 0.05f, groundMask) == true) && !isPlayer && isGrounded)
+        {
+            //Debug.Log("borderCheck == false");
+            rb.velocity = new Vector2(rb.velocity.x, 7f);
+        }
+        if (Physics2D.Raycast(borderCheck.position, Vector2.down, 5f, groundMask) == false)
+        {
             animator.SetBool("isChasing", false);
+            animator.SetBool("isClosed", false);
+        }
 
         distance = Vector2.Distance(target.position, animator.transform.position);
         if (distance < 2)
@@ -37,12 +47,7 @@ public class chasingState : StateMachineBehaviour
             animator.SetBool("isClosed", true);
             animator.SetBool("isChasing", false);
         }
-        if ((Physics2D.Raycast(borderCheck.position, Vector2.right, 2f) == false || Physics2D.Raycast(borderCheck.position, Vector2.left, 2f) == false) && !isPlayer && isGrounded)
-        {
-            //Debug.Log("borderCheck == false");
-            rb.velocity = new Vector2(rb.velocity.x, 4.5f);
-        }
-        //Debug.Log("isPlayer = " + isPlayer + " isGrounded = " + isGrounded + " " + Physics2D.Raycast(borderCheck.position, Vector2.right, 5) + " " + Physics2D.Raycast(borderCheck.position, Vector2.left, 5));
+        Debug.Log("isPlayer = " + isPlayer + " isGrounded = " + isGrounded + " " + Physics2D.Raycast(borderCheck.position, Vector2.right, 2f, groundMask).point + " " + Physics2D.Raycast(borderCheck.position, Vector2.left, 2f, groundMask).point);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

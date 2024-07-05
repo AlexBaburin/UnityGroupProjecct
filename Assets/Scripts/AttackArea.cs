@@ -12,5 +12,10 @@ public class AttackArea : MonoBehaviour
             Health health = collider.GetComponent<Health>();
             health.damage = damage;
         }
+        if (collider.GetComponent<HealthWithBlock>() != null)
+        {
+            HealthWithBlock health = collider.GetComponent<HealthWithBlock>();
+            health.damage = damage;
+        }
     }
 }

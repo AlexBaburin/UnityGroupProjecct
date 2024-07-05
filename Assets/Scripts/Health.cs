@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Health : MonoBehaviour
 {
     public float health = 100;
@@ -10,6 +10,8 @@ public class Health : MonoBehaviour
     public float damage = 0f;
     bool isIFramesActive = false;
     float frameTimer = 0f;
+
+    public Slider healthBar;
 
     // Start is called before the first frame update
     private void Start()
@@ -22,6 +24,7 @@ public class Health : MonoBehaviour
         if (damage > 0 && health > 0 && !isIFramesActive)
         {
             health -= damage;
+            healthBar.value = health;
             isIFramesActive = true;
         }
         if (isIFramesActive)

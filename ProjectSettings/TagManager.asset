@@ -21,7 +21,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Interface
   - 
   - 
   - 
@@ -44,4 +44,7 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 743788287
     locked: 0
