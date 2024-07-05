@@ -13,10 +13,12 @@ public class HealthWithBlock : MonoBehaviour
     bool isIFramesActive = false;
     float frameTimer = 0f;
 
+    AttackScript attackScript;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        attackScript = GetComponent<AttackScript>();
     }
 
     private void Awake()
@@ -28,21 +30,23 @@ public class HealthWithBlock : MonoBehaviour
         // Update is called once per frame
     void FixedUpdate()
     {
-        if (controls.Grounded.Block.IsPressed() && !(AnimatorIsPlaying("Hurt") || AnimatorIsPlaying("Wall Slide")) && health > 0 ||
-            AnimatorIsPlaying("Block"))
+        if ((controls.Grounded.Block.IsPressed() && !(AnimatorIsPlaying("Hurt") || AnimatorIsPlaying("Wall Slide")) && health > 0 ||
+            AnimatorIsPlaying("Block")) && !attackScript.isAttacking)
         {
-            animator.SetBool("IdleBlock", true);
+            animator.SetBool("Blocking", true);
+            if (!AnimatorIsPlaying("Block") && !AnimatorIsPlaying("Idle Block"))
+                animator.SetTrigger("Block");
             isBlocking = true;
             if (damage > 0)
             {
                 damage = 0;
-                animator.SetTrigger("Block");
+                animator.SetTrigger("Deflect");
             }
         }
         else if (health > 0)
         {
             isBlocking = false;
-            animator.SetBool("IdleBlock", false);
+            animator.SetBool("Blocking", false);
         }
 
         //Same as Health
