@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Threading;
 public class Enemy : MonoBehaviour
 {
     Transform target;
@@ -12,9 +13,12 @@ public class Enemy : MonoBehaviour
     public Slider enemyHealthBar;
     public Health healthEnemy;
     public GameObject attackArea;
+    float deathTimer = 0f;
+    float timeUnitilDespawn = 3f;
     // Start is called before the first frame update
     void Start()
     {
+        animator.SetBool("isDead", false);
         enemyHealthBar.value = healthEnemy.health;
         target = GameObject.FindGameObjectWithTag("Player").transform;
         Physics2D.IgnoreCollision(target.GetComponent<Collider2D>(), GetComponent<Collider2D>());
@@ -23,13 +27,25 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (target.position.x > transform.position.x)
+        if (!animator.GetBool("isDead"))
         {
-            transform.localScale = new Vector3(-5, 5);
+            if (target.position.x > transform.position.x)
+            {
+                transform.localScale = new Vector3(-5, 5);
+            }
+            else
+            {
+                transform.localScale = new Vector3(5, 5);
+            }
         }
-        else
+
+        if (animator.GetBool("isDead") == true)
         {
-            transform.localScale = new Vector3(5, 5);
+            deathTimer += Time.fixedDeltaTime;
+        }
+        if (deathTimer > timeUnitilDespawn)
+        {
+            Destroy(gameObject);
         }
     }
     void Flip()
