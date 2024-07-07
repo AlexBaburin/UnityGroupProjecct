@@ -8718,6 +8718,7 @@ MonoBehaviour:
     m_Bits: 64
   playerRB: {fileID: 1597252618}
   animator: {fileID: 1597252619}
+  textOfCoins: {fileID: 1615326446}
 --- !u!70 &1597252617
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
