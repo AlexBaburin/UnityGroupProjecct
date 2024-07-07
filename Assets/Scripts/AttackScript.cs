@@ -22,6 +22,7 @@ public class AttackScript : MonoBehaviour
     float TimeOfResumingStamina = 0f;
     public int stamina = 100;
     public int staminaResuming = 1;
+    public float staminaCoolDown = 2.5f;
 
     public Animator animator;
     public Slider PlayerStaminaBar;
@@ -117,7 +118,7 @@ public class AttackScript : MonoBehaviour
             stamina = 0;
             PlayerStaminaBar.value = 0;
         }
-        if (stamina < 100 && TimeOfCoolDownStamina > 2.5)
+        if (stamina < 100 && TimeOfCoolDownStamina > staminaCoolDown)
         {
             TimeOfResumingStamina += Time.deltaTime;
             if (TimeOfResumingStamina > 0.01)

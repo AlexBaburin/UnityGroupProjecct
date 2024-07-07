@@ -43,6 +43,15 @@ public class Shop : MonoBehaviour
                         Destroy(gameObject);
                     }
                     break;
+                case "better stamina":
+                    if (Coin.coins >= 10)
+                    {
+                        Coin.coins -= 10;
+                        AttackScript area = GameObject.FindGameObjectsWithTag("Player")[0].GetComponents<AttackScript>()[0];
+                        area.staminaCoolDown = 1f;
+                        Destroy(gameObject);
+                    }
+                    break;
             }
         }
     }
