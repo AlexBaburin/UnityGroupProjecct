@@ -8,6 +8,7 @@ public class chasingState : StateMachineBehaviour
     Transform target;
     bool isPlayer = true, isGrounded = true;
     float distance;
+    float health;
 
     public float speed = 3;
     Transform borderCheck, groundCheck;
@@ -21,6 +22,7 @@ public class chasingState : StateMachineBehaviour
         playerLayer = animator.GetComponent<Enemy>().layerMask;
         groundMask = animator.GetComponent<Enemy>().groundMask;
         groundCheck = animator.GetComponent<Enemy>().groundCheck;
+        health = animator.GetComponent<Health>().health;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -35,17 +37,23 @@ public class chasingState : StateMachineBehaviour
             //Debug.Log("borderCheck == false");
             rb.velocity = new Vector2(rb.velocity.x, 7f);
         }
-        if (Physics2D.Raycast(borderCheck.position, Vector2.down, 5f, groundMask) == false)
+        if (Physics2D.Raycast(borderCheck.position, Vector2.down, 5f, groundMask) == false && health > 0)
         {
             animator.SetBool("isChasing", false);
             animator.SetBool("isClosed", false);
         }
 
         distance = Vector2.Distance(target.position, animator.transform.position);
-        if (distance < 2)
+        if (distance < 2 && health > 0)
         {
             animator.SetBool("isClosed", true);
             animator.SetBool("isChasing", false);
+        }
+        if (health <= 0)
+        {
+            animator.SetBool("isDead", true);
+            animator.SetBool("isChasing", false);
+            animator.SetBool("isClosed", false);
         }
         //Debug.Log("isPlayer = " + isPlayer + " isGrounded = " + isGrounded + " " + Physics2D.Raycast(borderCheck.position, Vector2.right, 2f, groundMask).point + " " + Physics2D.Raycast(borderCheck.position, Vector2.left, 2f, groundMask).point);
     }

@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     public Health healthEnemy;
     public GameObject attackArea;
     float deathTimer = 0f;
-    float timeUnitilDespawn = 3f;
+    float timeUnitilDespawn = 1f;
     // Start is called before the first frame update
     void Start()
     {
