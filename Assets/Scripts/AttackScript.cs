@@ -18,7 +18,7 @@ public class AttackScript : MonoBehaviour
     PlayerControls controls;
 
     int staminaDamageAmount = 15;
-    float TimeOfCoolDownStamina = 0f;
+    public float TimeOfCoolDownStamina = 0f;
     float TimeOfResumingStamina = 0f;
     public int stamina = 100;
     public int staminaResuming = 1;
