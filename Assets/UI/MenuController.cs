@@ -74,7 +74,7 @@ public class MenuController : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("TestScene");
+        SceneManager.LoadSceneAsync(1);
     }
 
     private void OnResumeButtonClicked()

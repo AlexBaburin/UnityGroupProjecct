@@ -76,6 +76,10 @@ public class HealthWithBlock : MonoBehaviour
         if (health < 0)
             health = 0;
 
+        if (health == 0)
+            animator.SetBool("isDead", true);
+        else
+            animator.SetBool("isDead", false);
         damage = 0f;
     }
 
