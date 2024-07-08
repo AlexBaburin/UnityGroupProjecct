@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class chasingState : StateMachineBehaviour
+public class barbarianJump : StateMachineBehaviour
 {
     Rigidbody2D rb;
     Transform target;
@@ -16,12 +16,13 @@ public class chasingState : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        groundMask = animator.GetComponent<Enemy>().groundMask;
+        groundCheck = animator.GetComponent<Enemy>().groundCheck;
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundMask);
         target = GameObject.FindGameObjectsWithTag("Player")[0].transform;
         borderCheck = animator.GetComponent<Enemy>().borderCheck;
         rb = animator.GetComponent<Enemy>().rb;
         playerLayer = animator.GetComponent<Enemy>().layerMask;
-        groundMask = animator.GetComponent<Enemy>().groundMask;
-        groundCheck = animator.GetComponent<Enemy>().groundCheck;
         health = animator.GetComponent<Health>();
     }
 
@@ -30,6 +31,7 @@ public class chasingState : StateMachineBehaviour
     {
         isPlayer = Physics2D.OverlapCircle(rb.position, 2f, playerLayer);
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundMask);
+        animator.SetBool("Grounded", Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundMask));
         Vector2 newPos = new Vector2(target.position.x, animator.transform.position.y);
         animator.transform.position = Vector2.MoveTowards(animator.transform.position, newPos, speed * Time.deltaTime);
         if ((Physics2D.Raycast(borderCheck.position, Vector2.left, 0.05f, groundMask) == true || Physics2D.Raycast(borderCheck.position, Vector2.right, 0.05f, groundMask) == true) && !isPlayer && isGrounded)
@@ -48,6 +50,10 @@ public class chasingState : StateMachineBehaviour
         {
             animator.SetBool("isClosed", true);
             animator.SetBool("isChasing", false);
+        }
+        if (health.damage > 0)
+        {
+            animator.SetTrigger("Hurt");
         }
         if (health.health <= 0)
         {

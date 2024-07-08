@@ -31,11 +31,11 @@ public class Enemy : MonoBehaviour
         {
             if (target.position.x > transform.position.x)
             {
-                transform.localScale = new Vector3(-5, 5);
+                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * -1, transform.localScale.y);
             }
             else
             {
-                transform.localScale = new Vector3(5, 5);
+                transform.localScale = new (Mathf.Abs(transform.localScale.x), transform.localScale.y);
             }
         }
 

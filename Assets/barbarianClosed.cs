@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class slimeClosed : StateMachineBehaviour
+public class barbarianClosed : StateMachineBehaviour
 {
     Transform target;
     float distance;
@@ -25,7 +25,7 @@ public class slimeClosed : StateMachineBehaviour
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
         foreach (AnimationClip clip in clips)
         {
-            if (clip.name == "slimer")
+            if (clip.name == "HeavyBandit_Attack")
                 attackTime = clip.length * 2;
         }
     }

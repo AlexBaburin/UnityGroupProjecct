@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class slimeClosed : StateMachineBehaviour
+public class barbarianClosed_2 : StateMachineBehaviour
 {
     Transform target;
+
     float distance;
     bool isAttacking;
+    bool isLunging = false;
     Health health;
+    public int lungeSpeed = 5;
+
+    float scaleX = 1.5f;
+
+    float direction;
 
     bool isActiveAttackArea = true;
     float timer = 0f;
@@ -25,8 +32,8 @@ public class slimeClosed : StateMachineBehaviour
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
         foreach (AnimationClip clip in clips)
         {
-            if (clip.name == "slimer")
-                attackTime = clip.length * 2;
+            if (clip.name == "HeavyBandit_Lunge")
+                attackTime = clip.length;
         }
     }
 
@@ -37,12 +44,26 @@ public class slimeClosed : StateMachineBehaviour
 
         timer += Time.deltaTime;
         Debug.Log(timer);
-        if (timer >= attackTime * 0.66 && timer <= attackTime * 0.66 + 0.05f)
+        if (timer >= attackTime * 0.75 && timer <= attackTime)
         {
+            if (!isLunging)
+            {
+                direction = (target.position.x - animator.transform.position.x) / 
+                    Mathf.Abs(target.position.x - animator.transform.position.x);
+                isLunging = true;
+                scaleX = animator.transform.localScale.x;
+            }
+            animator.transform.localScale =
+                new Vector3(scaleX, animator.transform.localScale.y);
+            animator.transform.position = new Vector2(animator.transform.position.x + direction * lungeSpeed * Time.deltaTime,
+                animator.transform.position.y);
             isActiveAttackArea = true;
         }
-        if (timer > attackTime * 0.66 + 0.05f || timer < attackTime * 0.66)
+        if (timer > attackTime || timer < attackTime * 0.75)
+        {
             isActiveAttackArea = false;
+            isLunging = false;
+        }
 
         //Debug.Log("bool = " + isActiveAttackArea + " timer = " + timer);
         attackArea.SetActive(isActiveAttackArea);

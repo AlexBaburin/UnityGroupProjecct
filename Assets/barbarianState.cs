@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class slimeState : StateMachineBehaviour
+public class barbarianState : StateMachineBehaviour
 {
     Transform target;
     Transform borderCheck;
@@ -12,6 +12,7 @@ public class slimeState : StateMachineBehaviour
 
     float delayBetweenAttacks = 1f;
     float delayTimer = 0f;
+    int attackType = 0;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -19,6 +20,7 @@ public class slimeState : StateMachineBehaviour
         target = GameObject.FindGameObjectsWithTag("Player")[0].transform;
         borderCheck = animator.GetComponent<Enemy>().borderCheck;
         groundMask = animator.GetComponent<Enemy>().groundMask;
+
         health = animator.GetComponent<Health>();
     }
 
@@ -39,6 +41,8 @@ public class slimeState : StateMachineBehaviour
                 animator.SetBool("isChasing", true);
             else if (!animator.GetBool("isOnDelay"))
             {
+                attackType = Random.Range(1, 4);
+                animator.SetInteger("AttackType", attackType);
                 animator.SetBool("isClosed", true);
             }
         }
@@ -47,6 +51,11 @@ public class slimeState : StateMachineBehaviour
         {
             animator.SetBool("isOnDelay", false); 
             delayTimer = 0f;
+        }
+
+        if (health.damage > 0)
+        {
+            animator.SetTrigger("Hurt");
         }
 
         if (health.health <= 0)
