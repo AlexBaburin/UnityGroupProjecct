@@ -74,7 +74,7 @@ public class MenuController : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadScene(1);
     }
 
     private void OnResumeButtonClicked()
@@ -88,13 +88,17 @@ public class MenuController : MonoBehaviour
 
     public void Quit()
     {
-        SceneManager.LoadSceneAsync(0);
-        Time.timeScale = 0;
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1;
+
+        AudioListener.pause = false;
     }
 
     private void OnQuitButtonClicked()
     {
-        Time.timeScale = 0;
-        SceneManager.LoadSceneAsync(0);
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
+
+        AudioListener.pause = false;
     }
 }

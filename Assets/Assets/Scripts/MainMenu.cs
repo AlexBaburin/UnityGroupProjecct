@@ -10,17 +10,17 @@ public class MainMenu : MonoBehaviour
     
     public void OnPlayClicked()
     {
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadScene(1);
     }
 
     public void OnSettingsClicked()
     {
-        SceneManager.LoadSceneAsync(2);
+        SceneManager.LoadScene(2);
     }
 
     public void OnGoBackClicked()
     {
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadScene(0);
     }
 
     public void OnQuitClicked()
