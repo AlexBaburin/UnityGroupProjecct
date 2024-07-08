@@ -13,8 +13,14 @@ public class Enemy : MonoBehaviour
     public Slider enemyHealthBar;
     public Health healthEnemy;
     public GameObject attackArea;
+    public GameObject Coin;
+    public GameObject bossLadder, Ladder;
+    public float speedFallLadder = 1;
+    
+    GameObject Boss;
     float deathTimer = 0f;
     float timeUnitilDespawn = 1f;
+    bool lever = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +51,31 @@ public class Enemy : MonoBehaviour
         }
         if (deathTimer > timeUnitilDespawn)
         {
-            Destroy(gameObject);
+            if (gameObject.name == "barbarian")
+            {
+                if (lever)
+                {
+                    lever = false;
+                    Boss = GameObject.FindGameObjectsWithTag("bossBar")[0];
+                    Boss.SetActive(false);
+                }
+                bossLadder.transform.Translate(Vector2.down * speedFallLadder * Time.deltaTime);
+                if (bossLadder.transform.position.y <= 0)
+                {
+                    Ladder.SetActive(true);
+                    Destroy(gameObject);
+                    Instantiate(Coin, new Vector2(transform.position.x, transform.position.y + 0.5f), Quaternion.identity);
+                    Instantiate(Coin, new Vector2(transform.position.x + 1f, transform.position.y + 0.5f), Quaternion.identity);
+                    Instantiate(Coin, new Vector2(transform.position.x - 1f, transform.position.y + 0.5f), Quaternion.identity);
+                }
+                GameObject.FindGameObjectsWithTag("MainCamera")[0].GetComponent<AudioSource>().mute = false;
+                GameObject.FindGameObjectsWithTag("detector")[0].GetComponent<AudioSource>().mute = true;
+            }
+            else
+            {
+                Destroy(gameObject);
+                Instantiate(Coin, transform.position, Quaternion.identity);
+            }
         }
     }
     void Flip()

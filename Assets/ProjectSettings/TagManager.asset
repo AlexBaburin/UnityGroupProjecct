@@ -9,6 +9,10 @@ TagManager:
   - hp
   - ladder
   - better stamina
+  - gameover
+  - bossBar
+  - detector
+  - bossLadder
   layers:
   - Default
   - TransparentFX

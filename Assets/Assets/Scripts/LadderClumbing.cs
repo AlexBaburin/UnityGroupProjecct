@@ -11,17 +11,26 @@ public class LadderClumbing : MonoBehaviour
     bool isOnLadder = false;
     float inputVertical;
 
+    public AudioSource source;
+    public AudioClip clip;
     private void Start()
     {
         playerComponent = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Rigidbody2D>();
         jump = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<PlayerMovement>();
     }
 
+    private void Climbing()
+    {
+        clip = (AudioClip)Resources.Load("Sounds/climbing");
+        source.clip = clip;
+        source.Play();
+    }
     void Update()
     {
         if (isOnLadder)
         {
             Debug.Log("isOnLadder");
+            Climbing();
             inputVertical = Input.GetAxis("Vertical");
             playerComponent.velocity = new Vector2(playerComponent.velocity.x, inputVertical * climbSpeed);
         }

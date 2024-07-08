@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public PlayerControls controls;
     float direction = 0;
+    int currentCoins = 0;
 
     public float speed = 400;
     public float MaxSpeed = 1200;
@@ -34,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     public TextMeshProUGUI textOfCoins;
 
+    public AudioSource source;
+    public AudioClip clip;
     private void Awake()
     {
         controls = new PlayerControls();
@@ -53,10 +56,18 @@ public class PlayerMovement : MonoBehaviour
         playerDamaged = GetComponent<PlayerDamaged>();
         hp = GetComponent<HealthWithBlock>();
     }
-
+    private void CoinPickUp()
+    {
+        clip = (AudioClip)Resources.Load("Sounds/coin");
+        source.clip = clip;
+        source.Play();
+    }
     private void Update()
     {
+        if (currentCoins != Coin.coins)
+            CoinPickUp();
         textOfCoins.text = "x" + Coin.coins;
+        currentCoins = Coin.coins;
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
         isNearWall = Physics2D.OverlapCircle(wallCheck.position, 0.1f, groundLayer);
         isDead = playerDamaged.isDead;
